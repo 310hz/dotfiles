@@ -41,33 +41,43 @@ flatdir_restore() {
     flatdir_die "no archived directories found"
   fi
 
-  local selection_line
-  selection_line="$(
+  local -a fzf_opts=(
+    --height=60%
+    --reverse
+    --delimiter=$'\t'
+    --with-nth=1
+    --preview="bash -lc 'source \"$common_sh\"; flatdir_preview_exec_for_path \"\$1\"' _ {2}"
+    --multi
+    --bind=tab:toggle+down,shift-tab:toggle+up
+    --header='Tab: select multiple  Enter: confirm'
+  )
+
+  local selection_lines
+  selection_lines="$(
     printf '%s\n' "${rows[@]}" |
-      fzf \
-        --height=60% \
-        --reverse \
-        --delimiter=$'\t' \
-        --with-nth=1 \
-        --preview="bash -lc 'source \"$common_sh\"; flatdir_preview_exec_for_path \"\$1\"' _ {2}"
+      fzf "${fzf_opts[@]}"
   )" || true
 
-  [[ -n "$selection_line" ]] || flatdir_die "no selection"
+  [[ -n "$selection_lines" ]] || flatdir_die "no selection"
 
   local display archive_dir dest
-  IFS=$'\t' read -r display archive_dir dest <<<"$selection_line"
+  while IFS=$'\t' read -r display archive_dir dest; do
+    [[ -n "$archive_dir" ]] || flatdir_die "internal error: empty selection"
+    [[ -d "$archive_dir" ]] || flatdir_die "not a directory: $archive_dir"
+    [[ -n "$dest" ]] || flatdir_die "internal error: empty dest"
 
-  [[ -n "$archive_dir" ]] || flatdir_die "internal error: empty selection"
-  [[ -d "$archive_dir" ]] || flatdir_die "not a directory: $archive_dir"
-  [[ -n "$dest" ]] || flatdir_die "internal error: empty dest"
+    if [[ -e "$dest" ]]; then
+      flatdir_die "restore destination exists: $dest"
+    fi
+  done <<<"$selection_lines"
 
-  if [[ -e "$dest" ]]; then
-    flatdir_die "restore destination exists: $dest"
-  fi
+  while IFS=$'\t' read -r display archive_dir dest; do
+    [[ -n "$archive_dir" ]] || continue
 
-  flatdir_run_cmd mkdir -p -- "$(dirname -- "$dest")"
+    flatdir_run_cmd mkdir -p -- "$(dirname -- "$dest")"
 
-  flatdir_safe_mv "$archive_dir" "$dest"
-  flatdir_run_cmd rm -f -- "$dest/.flatdir_archived"
-  echo "restored: $dest" >&2
+    flatdir_safe_mv "$archive_dir" "$dest"
+    flatdir_run_cmd rm -f -- "$dest/.flatdir_archived"
+    echo "restored: $dest" >&2
+  done <<<"$selection_lines"
 }

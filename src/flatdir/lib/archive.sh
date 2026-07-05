@@ -9,50 +9,61 @@ flatdir_archive() {
   flatdir_require_cmd mkdir
   flatdir_require_cmd mv
 
-  local target archive_root rel dest
+  local targets target archive_root rel dest
 
   archive_root="$(flatdir_archive_root)"
   flatdir_run_cmd mkdir -p -- "$archive_root"
 
-  target="$(flatdir_fzf_select)"
-  [[ -n "$target" ]] || flatdir_die "no selection"
-  [[ -d "$target" ]] || flatdir_die "not a directory: $target"
+  targets="$(flatdir_fzf_select --multi)"
+  [[ -n "$targets" ]] || flatdir_die "no selection"
 
-  # archive as if $archive_root is a virtual $HOME (store by relative path from $HOME)
-  rel="$(flatdir_relpath_from_home "$target")"
-  dest="${archive_root}/${rel}"
+  while IFS= read -r target; do
+    [[ -n "$target" ]] || continue
+    [[ -d "$target" ]] || flatdir_die "not a directory: $target"
 
-  if [[ -e "$dest" ]]; then
-    flatdir_die "archive destination exists: $dest"
-  fi
+    # archive as if $archive_root is a virtual $HOME (store by relative path from $HOME)
+    rel="$(flatdir_relpath_from_home "$target")"
+    dest="${archive_root}/${rel}"
 
-  flatdir_run_cmd mkdir -p -- "$(dirname -- "$dest")"
-
-  flatdir_safe_mv "$target" "$dest"
-
-  # marker for restore (used to list archived dirs)
-  flatdir_run_cmd touch -- "$dest/.flatdir_archived"
-
-  # cleanup candidates (do not delete by default; always confirm)
-  local -a candidates=(
-    ".DS_Store"
-    ".venv"
-    "node_modules"
-    "__pycache__"
-    ".ipynb_checkpoints"
-  )
-
-  local c p
-  for c in "${candidates[@]}"; do
-    p="${dest}/${c}"
-    if [[ -e "$p" ]]; then
-      if flatdir_confirm "delete '$p'?"; then
-        flatdir_safe_rm "$p"
-      fi
+    if [[ -e "$dest" ]]; then
+      flatdir_die "archive destination exists: $dest"
     fi
-  done
+  done <<<"$targets"
 
-  echo "archived: $dest" >&2
+  while IFS= read -r target; do
+    [[ -n "$target" ]] || continue
+
+    rel="$(flatdir_relpath_from_home "$target")"
+    dest="${archive_root}/${rel}"
+
+    flatdir_run_cmd mkdir -p -- "$(dirname -- "$dest")"
+
+    flatdir_safe_mv "$target" "$dest"
+
+    # marker for restore (used to list archived dirs)
+    flatdir_run_cmd touch -- "$dest/.flatdir_archived"
+
+    # cleanup candidates (do not delete by default; always confirm)
+    local -a candidates=(
+      ".DS_Store"
+      ".venv"
+      "node_modules"
+      "__pycache__"
+      ".ipynb_checkpoints"
+    )
+
+    local c p
+    for c in "${candidates[@]}"; do
+      p="${dest}/${c}"
+      if [[ -e "$p" ]]; then
+        if flatdir_confirm "delete '$p'?"; then
+          flatdir_safe_rm "$p"
+        fi
+      fi
+    done
+
+    echo "archived: $dest" >&2
+  done <<<"$targets"
 }
 
 flatdir_archive_select() {

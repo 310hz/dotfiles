@@ -6,13 +6,20 @@ set -euo pipefail
 source "${FLATDIR_LIB_DIR}/fzf_select.sh"
 
 flatdir_remove() {
-  # select a directory from managed roots (depth 1) then delete it
-  local target
+  # select directories from managed roots (depth 1) then delete them
+  local targets target
 
-  target="$(flatdir_fzf_select)"
+  targets="$(flatdir_fzf_select --multi)"
 
-  [[ -n "$target" ]] || flatdir_die "no selection"
-  [[ -d "$target" ]] || flatdir_die "not a directory: $target"
+  [[ -n "$targets" ]] || flatdir_die "no selection"
 
-  flatdir_safe_rm "$target"
+  while IFS= read -r target; do
+    [[ -n "$target" ]] || continue
+    [[ -d "$target" ]] || flatdir_die "not a directory: $target"
+  done <<<"$targets"
+
+  while IFS= read -r target; do
+    [[ -n "$target" ]] || continue
+    flatdir_safe_rm "$target"
+  done <<<"$targets"
 }

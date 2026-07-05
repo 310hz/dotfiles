@@ -2,6 +2,12 @@
 set -euo pipefail
 
 flatdir_fzf_select() {
+  local multi=0
+  if [[ "${1:-}" == "--multi" ]]; then
+    multi=1
+    shift
+  fi
+
   flatdir_require_cmd fzf
   flatdir_require_cmd zoxide
 
@@ -35,22 +41,33 @@ flatdir_fzf_select() {
     done <<<"$sorted"
   )"
 
-  local selection_line
-  selection_line="$(
+  local -a fzf_opts=(
+    --height=60%
+    --reverse
+    --delimiter=$'\t'
+    --with-nth=1
+    --preview="bash -lc 'source \"$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/common.sh\"; flatdir_preview_exec_for_path \"\$1\"' _ {2}"
+  )
+
+  if [[ "$multi" -eq 1 ]]; then
+    fzf_opts+=(
+      --multi
+      --bind=tab:toggle+down,shift-tab:toggle+up
+      --header='Tab: select multiple  Enter: confirm'
+    )
+  fi
+
+  local selection_lines
+  selection_lines="$(
     printf '%s\n' "$rows" |
-      fzf \
-        --height=60% \
-        --reverse \
-        --delimiter=$'\t' \
-        --with-nth=1 \
-        --preview="bash -lc 'source \"$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/common.sh\"; flatdir_preview_exec_for_path \"\$1\"' _ {2}"
+      fzf "${fzf_opts[@]}"
   )" || true
 
   # align with wrapper usage: on cancel, print nothing and return success.
-  if [[ -z "$selection_line" ]]; then
+  if [[ -z "$selection_lines" ]]; then
     return 0
   fi
 
   # stdout must be full path (2nd field)
-  printf '%s\n' "$selection_line" | cut -f2-
+  printf '%s\n' "$selection_lines" | cut -f2-
 }
