@@ -4,7 +4,7 @@ flatdir() {
 
     [ -z "$out" ] && return
 
-    if [ -d "$out" ]; then
+    if { [ "$#" -eq 0 ] || [ "$1" = "-a" ]; } && [ -d "$out" ]; then
         cd "$out"
     else
         printf '%s\n' "$out"
