@@ -1,6 +1,6 @@
 ---
 name: python-coding-rules
-description: Pythonコーディング時のルールやベストプラクティスに関するスキル
+description: Pythonコーディング時のルールやベストプラクティス。Pythonコーディング時に必ず参照すること。
 ---
 
 # Python Coding Rules

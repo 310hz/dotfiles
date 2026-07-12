@@ -1,6 +1,6 @@
 ---
 name: python-coding-rules
-description: Skills related to rules and best practices for Python coding
+description: Rules and best practices for Python coding. Always refer to this when coding in Python.
 ---
 
 # Python Coding Rules
@@ -11,19 +11,16 @@ description: Skills related to rules and best practices for Python coding
     - File name: fname
     - Directory path: dpath
     - Directory name: dname
-- Variable names should follow the `abstract_concrete` pattern:
-    - This improves readability when listing multiple related variables. Example: dpath_dataset, dpath_output, fpath_config
-- Use `typer` to manage command-line arguments. Ensure the `-h` help flag is enabled.
+- Variable names should follow the `abstract_concrete` format.
+    - This makes it easier to read when multiple related variables are listed together. Example: dpath_dataset, dpath_output, fpath_config
+- Use `typer` for managing command-line arguments. Ensure that help display with `-h` is enabled.
 
-```
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 app = typer.Typer(add_completion=False, context_settings=CONTEXT_SETTINGS)
-```
 
-- Limit code lines to 79 characters, and comments or strings to 72 characters.
-- When writing long strings, effectively use parentheses `()` as shown below to keep them within 79 characters:
+- Keep line length to 79 characters, and 72 characters for comments, etc.
+- When writing long strings, use `()` effectively to keep them within 79 characters as shown below.
 
-```
 @app.command()
 def main(
     api_key: str = typer.Option(
@@ -35,4 +32,3 @@ def main(
         ),
     ),
 ):
-```
