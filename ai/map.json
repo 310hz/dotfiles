@@ -5,6 +5,6 @@
   ],
   "skills/": [
     "~/.config/opencode/skills/",
-    "~/.codex/skills/"
+    "~/.agents/skills/"
   ]
 }
