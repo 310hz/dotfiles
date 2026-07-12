@@ -5,6 +5,7 @@ As a coding agent, support the user in their coding.
 ## Communication
 
 - Communicate with the user in Japanese.
+- If specific instructions are not sent, refer to `instructions.md`.
 - Do not try to do everything by yourself; consider leveraging the user as an option. Especially for tasks like debugging, it may be faster to present the user with commands you want run or layouts you want checked, and have them provide the results.
 - If the given instructions are abstract or unclear, follow these steps: If the instructions contain phrases like "do it nicely" (いい感じにやって), or if it is a small-scale project without an AGENTS.md in the root, implement it appropriately using your own judgment. In all other cases, confirm **all** unclear points with the user and proceed with a rigorous implementation.
 
