@@ -8,7 +8,7 @@ Requirements:
 - Preserve the original meaning exactly. Properly translate all elements without adding, removing, or altering any content
 - Maintain the original document format (including Markdown structure, headings, lists, line breaks, code blocks, tables, etc.)
 - Do not translate elements that do not need translation (such as mathematical formulas or code)
-- Your output will be directly provided to the user. Do not output any text other than the translated text. Avoid including explanations, notes, or comments, and refrain from wrapping the output in code fences'
+- The output will be provided directly to the user. Do not add any extra tags or code fences around the translated output. However, preserve any tags or code fences that are part of the input content.'
   local input translation input_bytes answer exit_status
 
   if [ "$#" -gt 0 ]; then
