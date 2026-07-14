@@ -1,6 +1,6 @@
 ---
 name: manage-python-version
-description: Configure and maintain Git-tag-driven versioning for distributable Python packages using uv, hatchling, hatch-vcs, importlib.metadata, and GitHub Actions. Use when creating or migrating a Python library so pyproject metadata, the package __version__ attribute, PyPI releases, and Git tags cannot drift; when adding automated tag-triggered publishing; or when diagnosing inconsistent or incorrect package versions.
+description: Configure and maintain Git-tag-driven versioning for Python packages using uv, hatchling, hatch-vcs, and importlib.metadata, with optional PyPI publishing through GitHub Actions. Use when creating or migrating a Python package so build metadata, the package __version__ attribute, and Git tags cannot drift; when optionally adding automated tag-triggered publishing; or when diagnosing inconsistent or incorrect package versions.
 ---
 
 # Manage Python Version
@@ -8,12 +8,17 @@ description: Configure and maintain Git-tag-driven versioning for distributable 
 Use the Git tag as the sole version source. Derive build metadata and the runtime
 `__version__` from it instead of maintaining duplicate version strings.
 
+Treat PyPI publishing and GitHub Actions release automation as optional. Complete
+the version-management setup without them unless the user asks to publish the
+package or automate releases.
+
 ## Inspect the project
 
 1. Read the repository instructions before changing files.
 2. Confirm that the project is a distributable Python package managed by uv.
 3. Inspect `pyproject.toml`, `uv.lock`, the import package, the distribution name,
-   existing release workflows, and existing tags.
+   and existing tags. Inspect release workflows only when publishing or release
+   automation is in scope.
 4. Stop and explain the incompatibility instead of silently replacing another
    intentional versioning system such as Poetry, PDM, setuptools-scm, or a custom
    release tool.
@@ -70,7 +75,11 @@ Replace `distribution-name` with the exact `[project].name`. Use an explicit
 fallback so source-tree imports have a defined value. Do not derive it from
 `__package__` when the distribution and import names can differ.
 
-## Automate tagged releases
+## Optionally automate PyPI releases
+
+Skip this section unless the user asks to publish to PyPI or automate package
+publishing. Tag-derived version management does not require PyPI, GitHub Actions,
+or a public package registry.
 
 Create or adapt `.github/workflows/release.yml` to:
 
@@ -104,15 +113,17 @@ Perform the applicable checks:
    tag-derived version.
 5. Inspect built metadata or install the wheel into an isolated environment and
    confirm `package.__version__` equals the distribution metadata version.
-6. Review the release workflow syntax and confirm checkout is not shallow.
+6. When release automation is in scope, review the workflow syntax and confirm
+   checkout is not shallow.
 
 Do not assume an untagged commit will have the next clean release version. Expect
 a PEP 440 development version containing distance and commit information. Never
 publish such a local version to PyPI.
 
-## Release procedure
+## Optional PyPI release procedure
 
-When the user explicitly authorizes a release:
+Skip this section for projects that only need version management. When the user
+explicitly authorizes a PyPI release:
 
 1. Require a clean, tested release commit.
 2. Choose the intended semantic version with the user if it was not specified.
