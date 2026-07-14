@@ -5,6 +5,7 @@ description: Rules and best practices for Python coding. Always refer to this wh
 
 # Python Coding Rules
 
+- Do not use `from __future__ import annotations`
 - Use `pathlib` for all path management. Do not use `os.path` or `glob.glob`.
 - Follow the prefixes below for path-related variable names:
     - File path: fpath
