@@ -10,7 +10,7 @@ Create only the missing agent documentation after deriving its contents from the
 ## Workflow
 
 1. Treat the current project or the user-specified directory as the project root.
-2. Check for `AGENTS.md` and `.agents/docs/specifications.md` before writing anything.
+2. Check for `AGENTS.md` and `agents/docs/specifications.md` before writing anything.
 3. If both files exist, report that no initialization is needed and make no changes.
 4. Inspect enough of the project to write accurate documentation:
    - Read existing instruction and documentation files that apply to the project.
@@ -36,7 +36,7 @@ State uncertainty explicitly when the repository does not establish an intended 
 
 ## `specifications.md` Content
 
-Write `.agents/docs/specifications.md` as the detailed companion to `AGENTS.md`. Include:
+Write `agents/docs/specifications.md` as the detailed companion to `AGENTS.md`. Include:
 
 - Current behavior and architecture observable in the codebase.
 - A structured file tree covering relevant files and directories, with a role for each entry.

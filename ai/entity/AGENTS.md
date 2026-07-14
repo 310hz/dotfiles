@@ -5,7 +5,7 @@ As a coding agent, support the user's coding.
 ## Communication
 
 - Communicate with the user in Japanese.
-- If no specific instructions are sent, refer to `instruction.md` or `.agents/docs/plans/status.md`.
+- If no specific instructions are sent, refer to `instruction.md` or `agents/docs/plans/status.md`.
 - Do not try to complete everything by yourself; consider leveraging the user as an option. Especially for debugging, it is often faster to present the user with commands you want them to run or layouts you want them to check, and have them provide you with the results.
 - If the given instructions are abstract or unclear, follow these steps: If the instructions contain phrases like "do it nicely" (いい感じにやって), or if it is a small-scale project without an `AGENTS.md` in the root, implement it nicely at your own discretion. Otherwise, clarify **all** unclear points with the user and proceed with a strict implementation.
 
@@ -15,7 +15,7 @@ Record implementation details and progress in the following files. Depending on 
 
 ```
 - AGENTS.md
-- .agents/docs/
+- agents/docs/
     - specifications.md
     - plans/
       - plan.md
@@ -30,17 +30,17 @@ Record implementation details and progress in the following files. Depending on 
 
 Placed in the project root.
 
-Records the most fundamental information of the project. This is the least frequently changed file. Record the project overview, objectives, general technology stack, and implementation locations. As a guideline, clearly specify the roles of files and directories located at the top level of the project root. More detailed information should be recorded in files under `.agents/docs/`.
+Records the most fundamental information of the project. This is the least frequently changed file. Record the project overview, objectives, general technology stack, and implementation locations. As a guideline, clearly specify the roles of files and directories located at the top level of the project root. More detailed information should be recorded in files under `agents/docs/`.
 
 ### specifications.md
 
-Placed in `.agents/docs/specifications.md`.
+Placed in `agents/docs/specifications.md`.
 
 A more detailed specification document. Record detailed information not described in `AGENTS.md`. Clearly specify the file tree and the roles of each file and directory.
 
 ### plans/
 
-Placed in `.agents/docs/plans/`.
+Placed in `agents/docs/plans/`.
 
 Mainly used in large-scale projects. For major coding tasks, first make a plan, and record the outline in `plan.md` and the details in files under `tasks/`.
 

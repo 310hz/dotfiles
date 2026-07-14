@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Create an implementation-ready plan from instruction.md. Use when Codex must investigate and clarify a requested product or change, then write deterministic planning documents under .agents/docs/plans/ without implementing it.
+description: Create an implementation-ready plan from instruction.md. Use when Codex must investigate and clarify a requested product or change, then write deterministic planning documents under agents/docs/plans/ without implementing it.
 ---
 
 # Planning
@@ -9,7 +9,7 @@ Produce a plan from `instruction.md` that requires no material design decisions 
 
 ## Process
 
-1. Use the user-specified project root or the current directory. Read `instruction.md`, applicable `AGENTS.md`, and existing `.agents/docs/`. Ask which `instruction.md` is authoritative if missing or ambiguous.
+1. Use the user-specified project root or the current directory. Read `instruction.md`, applicable `AGENTS.md`, and existing `agents/docs/`. Ask which `instruction.md` is authoritative if missing or ambiguous.
 2. Inspect relevant code, tests, manifests, configuration, schemas, and documentation. Identify current behavior and exact integration points. Thoroughly research every required technical and non-technical domain using primary sources, research papers, official standards, and other authoritative publications. Do not rely on unsupported general knowledge.
 3. Convert abstract ideas into concrete proposed behavior, scope, data flow, failures, and acceptance criteria.
 4. Ask the user to decide every material ambiguity. Present evidence, alternatives, tradeoffs, and a recommendation. Never silently decide product behavior, scope, compatibility, security, privacy, migration, public interfaces, or acceptance criteria.
@@ -18,7 +18,7 @@ Produce a plan from `instruction.md` that requires no material design decisions 
 
 ## Output
 
-Write under `.agents/docs/plans/` unless project instructions specify otherwise:
+Write under `agents/docs/plans/` unless project instructions specify otherwise:
 
 ```text
 plan.md
