@@ -1,0 +1,60 @@
+prefix_rule(
+  pattern=["git", [
+    "status",
+    "log",
+    "diff",
+    "show",
+    "add",
+    "commit",
+    "branch",
+    "rev-parse",
+    "ls-files",
+    "grep",
+    "blame",
+    "describe",
+  ]],
+  decision="allow",
+)
+
+prefix_rule(
+  pattern=["git", "remote", [
+    "get-url",
+    "show",
+  ]],
+  decision="allow",
+)
+
+prefix_rule(
+  pattern=["git", "worktree", [
+    "list",
+  ]],
+  decision="allow",
+)
+
+prefix_rule(
+  pattern=["gh", [
+    "status",
+    "auth",
+  ]],
+  decision="allow",
+)
+
+prefix_rule(
+  pattern=["gh", "pr", [
+    "view",
+    "list",
+    "diff",
+    "checks",
+    "status",
+  ]],
+  decision="allow",
+)
+
+prefix_rule(
+  pattern=["gh", "issue", [
+    "view",
+    "list",
+    "status",
+  ]],
+  decision="allow",
+)
