@@ -51,3 +51,4 @@ Record the progress in `status.md`. The agent should refer to this file to under
 - Use the `trash` command instead of the `rm` command.
 - Do not use the `python` command directly; always go through `uv`.
 - If a command you want to use is not installed, ask the user to install it.
+- Do not create temporary or cache files in locations inaccessible to the user, such as `/tmp`. If such files are necessary, always create them in the project root.
