@@ -20,7 +20,7 @@ mode = "last"
 debug = false
 
 # automatically expand aliases on space
-expand-alias = true
+expand-alias = false
 
 # automatically execute command after accepting suggestion
 auto-execute = false
