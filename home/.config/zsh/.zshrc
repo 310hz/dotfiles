@@ -38,7 +38,7 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
 zinit light zsh-users/zsh-syntax-highlighting # シンタックスハイライト
-# zinit light zsh-users/zsh-autosuggestions # 入力補完
+zinit light zsh-users/zsh-autosuggestions # 入力補完
 
 # pure prompt
 zinit ice pick"async.zsh" src"pure.zsh"
