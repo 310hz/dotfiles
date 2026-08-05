@@ -6,7 +6,6 @@ export GIT_ROOT=$(dirname $DOTFILES_ROOT)
 . "$HOME/.local/share/cargo/env" # rust
 eval "$(zoxide init zsh)" # zoxide
 eval "$(atuin init zsh --disable-up-arrow)" # atuin
-eval "$(iris init zsh)" # iris
 eval "$(mise activate zsh)" # mise
 
 if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
