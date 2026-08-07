@@ -1,6 +1,7 @@
 # Environment variables
 export PATH="$HOME/.local/bin:$PATH" # uv
 export GIT_ROOT=$(dirname $DOTFILES_ROOT)
+export SSH_AUTH_SOCK="$HOME/.ssh/proton-pass-agent.sock"
 
 # Application settings
 . "$HOME/.local/share/cargo/env" # rust
