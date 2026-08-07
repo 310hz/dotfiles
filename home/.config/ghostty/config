@@ -8,6 +8,7 @@ font-size = 15
 # terminal app
 macos-icon = glass
 confirm-close-surface = false
+shell-integration-features = ssh-env,ssh-terminfo
 
 # inherit path
 window-inherit-working-directory = false
