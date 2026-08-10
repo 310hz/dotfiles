@@ -1,5 +1,5 @@
 _natural_command_widget() {
-  local model="openrouter/openai/gpt-5.4-mini"
+  local model="openrouter/openai/gpt-5.6-terra"
   local -r input="${LBUFFER}"
   local -r curdir="${PWD}"
   local -r lsb="$(lsb_release -a 2>/dev/null)"
