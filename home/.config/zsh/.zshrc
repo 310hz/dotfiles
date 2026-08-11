@@ -40,6 +40,7 @@ autoload -Uz _zinit
 
 zinit light zsh-users/zsh-syntax-highlighting # シンタックスハイライト
 zinit light zsh-users/zsh-autosuggestions # 入力補完
+zinit light Aloxaf/fzf-tab # 補完候補の選択UIをfzfにする
 
 # pure prompt
 zinit ice pick"async.zsh" src"pure.zsh"
