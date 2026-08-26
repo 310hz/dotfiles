@@ -1,17 +1,18 @@
 ---
 name: git-commit
-description: Create consistent Git commits by splitting changes into appropriate units and writing messages with an English prefix and Japanese description. Use when committing changes, proposing or revising commit messages, or deciding how to split changes across commits.
+
+description: Create consistent Git commits by splitting changes into logical units and writing messages with an English prefix and Japanese description. Use when committing changes, proposing or revising commit messages, or deciding how to split changes.
 ---
 
 # Git Commit
 
 ## Create commits
 
-1. Inspect the target diff and the repository's existing commit history.
-2. Group changes into logical units that are meaningful and safe to revert independently.
-3. Write a commit message for each unit according to the rules below.
-4. Stage only the intended changes and review the staged diff before committing.
-5. Do not include unrelated changes or modifications that belong to the user.
+1. Inspect the target diff and existing commit history.
+2. Split changes into logical units that can be reviewed and reverted independently.
+3. Stage only the intended changes and review the staged diff before committing.
+4. Do not include unrelated or user-owned changes.
+5. Write each commit message according to the rules below.
 
 ## Write messages
 
@@ -21,43 +22,42 @@ Use this format:
 <type>(<scope>): <Japanese summary>
 
 <Japanese body, only when needed>
-```
+````
 
-- Write `type` in lowercase English.
-- Add `scope` only when it clarifies the affected area. Prefer lowercase English for it.
-- Write the summary and body in Japanese. Preserve the original spelling of proper nouns, API names, and identifiers.
-- Make the summary concrete and concise. Do not end it with a Japanese full stop.
-- Omit the body when the summary communicates the intent sufficiently.
-- When a body is necessary, explain the reason, background, constraints, or impact instead of narrating the implementation line by line.
-- Mark a breaking change with `!`, then explain its impact and migration path in the body or footer.
-- When linking an issue, add `Refs: #123` or `Closes: #123` at the end of the body.
+* Write `type` in lowercase English.
+* Add `scope` only when it clarifies the affected area. Prefer lowercase English.
+* Write the summary and body in Japanese, preserving proper nouns, API names, and identifiers.
+* Keep the summary concrete and concise. Do not end it with `。`.
+* Omit the body unless it adds useful context such as reason, background, constraints, or impact.
+* Mark breaking changes with `!` and explain the impact and migration path.
+* Add `Refs: #123` or `Closes: #123` when linking an issue.
 
 ## Choose a prefix
 
-- `feat`: Add a user-visible feature.
-- `fix`: Fix a defect.
-- `docs`: Change documentation only.
-- `refactor`: Improve code structure without changing behavior.
-- `test`: Add or modify tests.
-- `perf`: Improve performance.
-- `style`: Change formatting or notation without affecting behavior.
-- `build`: Change the build process or dependencies.
-- `ci`: Change CI configuration or scripts.
-- `chore`: Perform maintenance that does not fit another type.
-- `revert`: Revert a previous commit.
+* `feat`: Add a user-visible feature.
+* `fix`: Fix a defect.
+* `docs`: Documentation only.
+* `refactor`: Change structure without changing behavior.
+* `test`: Add or modify tests.
+* `perf`: Improve performance.
+* `style`: Formatting or notation only.
+* `build`: Build process or dependencies.
+* `ci`: CI configuration or scripts.
+* `chore`: Maintenance not covered above.
+* `revert`: Revert a previous commit.
 
-Choose the single `type` that best represents the primary purpose. If multiple types are equally necessary, consider splitting the commit.
+Choose the single `type` that best represents the commit. If multiple types are equally necessary, split the changes.
 
 ## Split commits
 
-Changes may be split into multiple commits when the message would otherwise become complex or need to enumerate several purposes. Split them in particular when:
+Split changes when:
 
-- An independent feature and bug fix are mixed together.
-- A refactoring can be separated from a behavior change.
-- Multiple unrelated areas are changed.
-- Each change can be reviewed or reverted independently.
+* Independent features and fixes are mixed.
+* Refactoring can be separated from behavior changes.
+* Unrelated areas are changed.
+* Changes can be reviewed or reverted independently.
 
-Keep inseparable implementation and tests for the same purpose in one commit. Order split commits so that each commit keeps the build and tests working whenever practical.
+Keep implementation and tests for the same purpose together. Order commits so each keeps the build and tests working whenever practical.
 
 ## Examples
 
@@ -69,4 +69,6 @@ feat(auth): パスキーによるログインを追加
 fix(config): 未設定時に既定値が適用されない問題を修正
 
 空文字列を設定済みとして扱っていたため、未設定判定を明示的に行う。
+```
+
 ```
