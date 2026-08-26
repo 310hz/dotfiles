@@ -1,12 +1,14 @@
 convert-all-gif() {
   if (( $# < 1 )); then
-    printf 'usage: convert-all-gif <pattern> [--fps <fps>] [--width <pixels>] [ffmpeg options...]\n' >&2
+    printf 'usage: convert-all-gif <pattern> [--fps <fps>] [--width <pixels>] [--speed <rate>] [--no|--yes] [ffmpeg options...]\n' >&2
     return 2
   fi
 
   local pattern="$1"
   local fps=15
   local width=
+  local speed=1
+  local overwrite=
   shift
 
   local -a ffmpeg_options
@@ -28,6 +30,22 @@ convert-all-gif() {
         width="$2"
         shift 2
         ;;
+      --speed)
+        if (( $# < 2 )); then
+          printf 'convert-all-gif: --speed requires a value\n' >&2
+          return 2
+        fi
+        speed="$2"
+        shift 2
+        ;;
+      --no)
+        overwrite=-n
+        shift
+        ;;
+      --yes)
+        overwrite=-y
+        shift
+        ;;
       --)
         shift
         ffmpeg_options+=( "$@" )
@@ -48,6 +66,10 @@ convert-all-gif() {
     printf 'convert-all-gif: --width must be a positive integer: %s\n' "$width" >&2
     return 2
   fi
+  if [[ ! "$speed" =~ '^[0-9]+([.][0-9]+)?$' ]] || (( speed <= 0 )); then
+    printf 'convert-all-gif: --speed must be a positive number: %s\n' "$speed" >&2
+    return 2
+  fi
 
   local -a files
   files=( ${~pattern}(N.) )
@@ -57,7 +79,7 @@ convert-all-gif() {
     return 1
   fi
 
-  local filter="fps=${fps}"
+  local filter="setpts=PTS/${speed},fps=${fps}"
   if [[ -n "$width" ]]; then
     filter+=",scale=${width}:-1:flags=lanczos"
   fi
@@ -66,7 +88,7 @@ convert-all-gif() {
   local input output
   for input in "${files[@]}"; do
     output="${input:r}.gif"
-    ffmpeg -i "$input" -filter_complex "$filter" "${ffmpeg_options[@]}" "$output" || return
+    ffmpeg ${overwrite:+"$overwrite"} -i "$input" -filter_complex "$filter" "${ffmpeg_options[@]}" "$output" || return
   done
 }
 
