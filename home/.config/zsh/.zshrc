@@ -3,6 +3,13 @@ export PATH="$HOME/.local/bin:$PATH" # uv
 export GIT_ROOT=$(dirname $DOTFILES_ROOT)
 export SSH_AUTH_SOCK="$HOME/.ssh/proton-pass-agent.sock"
 
+# Load environment variables from .env files
+for envfile in "$DOTFILES_ROOT"/secrets/**/*.env(N); do
+  set -a
+  source "$envfile"
+  set +a
+done
+
 # Application settings
 . "$HOME/.local/share/cargo/env" # rust
 eval "$(zoxide init zsh)" # zoxide
