@@ -66,6 +66,7 @@ alias cat="bat"
 alias rm="trash"
 alias du="dua"
 alias dui="dua interactive"
+alias j="just"
 
 ## shortcuts
 alias ..="cd ../"
