@@ -22,3 +22,6 @@ email = 90894519+310hz@users.noreply.github.com
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
+[alias]
+  agent = !git -c user.name="Agent" -c user.email="agent@local"
