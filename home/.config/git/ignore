@@ -13,4 +13,5 @@ wandb/
 .flatdir_archived
 n.ipynb
 msync.json
+instruction*.md
 
