@@ -12,7 +12,7 @@ hf-cache() {
   local listing selected line
   local -a targets
 
-  listing="$(hf cache ls --no-revisions --format table)" || return
+  listing="$(hf cache ls --no-revisions --format human --no-truncate)" || return
 
   case "$listing" in
     'No cached repositories found.')
