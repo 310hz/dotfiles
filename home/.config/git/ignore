@@ -10,6 +10,7 @@ wandb/
 # custom
 .trash/
 .ignore/
+agents/refs/
 .flatdir_archived
 n.ipynb
 msync.json
