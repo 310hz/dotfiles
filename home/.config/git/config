@@ -24,4 +24,4 @@
   required = true
 
 [alias]
-  agent = !git -c user.name="Agent"
+  agent = "!git -c user.name=Agent -c user.email=agent@local commit --trailer 'Co-authored-by: Komiya Kazuma <90894519+310hz@users.noreply.github.com>'"
