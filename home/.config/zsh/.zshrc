@@ -15,6 +15,7 @@ done
 eval "$(zoxide init zsh)" # zoxide
 eval "$(atuin init zsh --disable-up-arrow)" # atuin
 eval "$(mise activate zsh)" # mise
+eval "$(direnv hook zsh)" # direnv
 
 if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
   source "${GHOSTTY_RESOURCES_DIR}/shell-integration/zsh/ghostty-integration" # Ghostty
