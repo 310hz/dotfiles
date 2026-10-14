@@ -35,7 +35,7 @@ flatdir_restore() {
     display="$(flatdir_display_path_for_dir "$dest")"
 
     rows+=("${display}"$'\t'"${archive_dir}"$'\t'"${dest}")
-  done < <(find "$archive_root" -type f -name '.flatdir_archived' -print 2>/dev/null || true)
+  done < <(flatdir_list_archive_markers)
 
   if [[ ${#rows[@]} -eq 0 ]]; then
     flatdir_die "no archived directories found"

@@ -276,26 +276,38 @@ flatdir_list_depth1_dirs() {
   find "$root" -mindepth 1 -maxdepth 1 -type d ! -name '.*' -print
 }
 
-flatdir_zoxide_score() {
-  # args: path
-  local p="$1"
+flatdir_sort_by_zoxide() {
+  # reads newline-separated paths from stdin, outputs paths sorted desc by zoxide score.
+  # zoxide is queried once (per-path queries are O(N) process spawns).
   flatdir_require_cmd zoxide
 
-  # zoxide query -ls outputs: "score path" (all entries)
-  # find exact match; if not found, score=0
-  local score
-  score="$(zoxide query -ls 2>/dev/null | awk -v target="$p" '$2==target{print $1; exit}')" || true
-  [[ -n "$score" ]] || score="0"
-  echo "$score"
+  awk '
+    NR == FNR {
+      # "  12.0 /path with spaces": strip the score, keep the rest as path
+      line = $0
+      score = line
+      sub(/^ */, "", score); sub(/ .*/, "", score)
+      sub(/^ *[0-9.]+ /, "", line)
+      scores[line] = score
+      next
+    }
+    $0 != "" { printf "%s\t%s\n", ($0 in scores ? scores[$0] : 0), $0 }
+  ' <(zoxide query -ls 2>/dev/null) - | sort -rn | cut -f2-
 }
 
-flatdir_sort_by_zoxide() {
-  # reads newline-separated paths from stdin, outputs paths sorted desc by zoxide score
-  local p
-  while IFS= read -r p; do
-    [[ -n "$p" ]] || continue
-    printf '%s\t%s\n' "$(flatdir_zoxide_score "$p")" "$p"
-  done | sort -rn | cut -f2-
+flatdir_list_archive_markers() {
+  # Archive layout mirrors HOME: <archive_root>/<managed root rel>/<name>/.flatdir_archived.
+  # Look only at depth 1 of each managed root; a full `find` walks every archived node_modules.
+  local archive_root root rel m
+  archive_root="$(flatdir_archive_root)"
+
+  while IFS= read -r root; do
+    [[ -n "$root" ]] || continue
+    rel="$(flatdir_relpath_from_home "$root")"
+    for m in "${archive_root}/${rel}"/*/.flatdir_archived; do
+      [[ -f "$m" ]] && printf '%s\n' "$m"
+    done
+  done < <(flatdir_dirs_array)
 }
 
 flatdir_preview_cmd_for_path() {

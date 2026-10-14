@@ -12,34 +12,38 @@ flatdir_fzf_select() {
   flatdir_require_cmd zoxide
 
   # collect depth1 dirs under all managed roots (full paths)
-  local -a paths=()
+  local -a roots=()
   local root
   while IFS= read -r root; do
     [[ -n "$root" ]] || continue
-    while IFS= read -r p; do
-      [[ -n "$p" ]] || continue
-      paths+=("$p")
-    done < <(flatdir_list_depth1_dirs "$root")
+    [[ -d "$root" ]] || flatdir_die "not a directory: $root"
+    roots+=("$root")
   done < <(flatdir_dirs_array)
 
-  if [[ ${#paths[@]} -eq 0 ]]; then
+  if [[ ${#roots[@]} -eq 0 ]]; then
     flatdir_die "no directories found (did you run: flatdir track <path> ?)"
   fi
 
-  # sort by zoxide score (keep full path for scoring)
+  # exclude hidden directories
   local sorted
-  sorted="$(printf '%s\n' "${paths[@]}" | flatdir_sort_by_zoxide)"
+  sorted="$(find "${roots[@]}" -mindepth 1 -maxdepth 1 -type d ! -name '.*' -print | flatdir_sort_by_zoxide)"
+
+  if [[ -z "$sorted" ]]; then
+    flatdir_die "no directories found (did you run: flatdir track <path> ?)"
+  fi
 
   # build fzf rows: "display\tfullpath"
-  # - display: relative path for UI (rule depends on number of managed roots)
+  # - display: root-relative if one managed root, else HOME-relative (see flatdir_display_path_for_dir)
   # - fullpath: used for preview + stdout
-  local rows
-  rows="$(
-    while IFS= read -r p; do
-      [[ -n "$p" ]] || continue
-      printf '%s\t%s\n' "$(flatdir_display_path_for_dir "$p")" "$p"
-    done <<<"$sorted"
-  )"
+  local rows prefix
+  if [[ ${#roots[@]} -eq 1 ]]; then
+    prefix="${roots[0]%/}/"
+  else
+    prefix="${HOME%/}/"
+  fi
+  rows="$(awk -v prefix="$prefix" '
+    { d = (index($0, prefix) == 1) ? substr($0, length(prefix) + 1) : $0; printf "%s\t%s\n", d, $0 }
+  ' <<<"$sorted")"
 
   local -a fzf_opts=(
     --height=60%

@@ -97,7 +97,7 @@ flatdir_archive_select() {
 
     display="$rel"
     rows+=("${display}"$'\t'"${archive_dir}")
-  done < <(find "$archive_root" -type f -name '.flatdir_archived' -print 2>/dev/null || true)
+  done < <(flatdir_list_archive_markers)
 
   if [[ ${#rows[@]} -eq 0 ]]; then
     flatdir_die "no archived directories found"
