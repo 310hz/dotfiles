@@ -1,3 +1,5 @@
 backup/*
 *.env
 !.gitkeep
+AGENTS.md
+agents/
