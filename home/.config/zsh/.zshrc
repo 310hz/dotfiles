@@ -16,6 +16,7 @@ eval "$(zoxide init zsh)" # zoxide
 eval "$(atuin init zsh --disable-up-arrow)" # atuin
 eval "$(mise activate zsh)" # mise
 eval "$(direnv hook zsh)" # direnv
+eval "$(flatdir shell)" # flatdir
 
 if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
   source "${GHOSTTY_RESOURCES_DIR}/shell-integration/zsh/ghostty-integration" # Ghostty
@@ -88,6 +89,7 @@ v() {
 
 ## my apps
 alias llmweb="$HOME/workspace/llm-webui/entrypoint.sh"
+alias f="flatdir"
 
 # import modules
 for file in "$DOTFILES_ROOT"/modules/*; do
